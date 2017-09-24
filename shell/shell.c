@@ -14,30 +14,30 @@ char stri[1000];
 char *toExecute;
 int main (int atgc, char **arg, char **envp){
   char *enpath;
-  for(int i=0;envp[i] != (char *)0;i++){ //as long as the envp contains no 0
-    char ** envPath =mytoc (envp[i],'=');   //tokenize path
-    if(checkPath(envPath[0])){           //check if word path was found
-      enpath= envPath[1];                //return env, which should be in next potition on array
+  for(int i=0;envp[i] != (char *)0;i++){        //as long as the envp contains no 0
+    char ** envPath =mytoc (envp[i],'=');       //tokenize path
+    if(checkPath(envPath[0])){                  //check if word path was found
+      enpath= envPath[1];                       //return env, which should be in next potition on array
       break;
     }
   }
-  char **pathVect = mytoc(enpath,':');   //tokenize path from envp variable
+  char **pathVect = mytoc(enpath,':');          //tokenize path from envp variable
   
   
   while(equalsExit!=1){
     toExecute=NULL;
-    write(1,"$0",1);                      //display the $ promt
-    read(1,stri,sizeof( stri));           //get user input
+    write(1,"$0",1);                            //display the $ promt
+    read(1,stri,sizeof( stri));                 //get user input
     stri[sizeof(stri)+1]='\0';
-    char **tokeenVect =mytoc(stri,' ');   //call my tokenizer function
-    equalsExit =checkEx(stri);            //check if there must be an exit of the loop
+    char **tokeenVect =mytoc(stri,' ');         //call my tokenizer function
+    equalsExit =checkEx(stri);                  //check if there must be an exit of the loop
 
-    if(tokeenVect[0]){                    //if vector is not empty start command
-      if(isExecutable(tokeenVect[0])){    //If it is a full path
+    if(tokeenVect[0]){                          //if vector is not empty start command
+      if(isExecutable(tokeenVect[0])){          //If it is a full path
 	printf("Excecuting command:\n", tokeenVect[0]);
 	createChildProcess(tokeenVect[0] ,tokeenVect, envp); //create process
 	}
-      else{                               //search for full path
+      else{                                                  //search for full path
 	for( int i=0;pathVect[i] !=(char*)0;i++){
 	  char *temp = strcat(pathVect[i],"/");
 	  char *fullPath =strcat(temp,tokeenVect[0]);
@@ -68,15 +68,12 @@ int isExecutable(char *path){            //Method used to check if hte given pat
      execve(path,tokenVect,eenvp);        //execute child process
      
    }
-   else if (pid <0){
-     wait(&exitNorm);
+   else if (pid <0){ 
+     wait(&exitNorm);                                 //checks if process terminated abnormally
      if(WIFSIGNALED(exitNorm)){
        printf("Program Terminated with exit code : %d\n",WTERMSIG(exitNorm));
      }
 
-   }
-   else{
-     printf("Command Not Found\n");
    }
 
  }

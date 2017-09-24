@@ -5,7 +5,7 @@
 int equalsExit,numWords,currentWordLen;
 char *stricopy;                               
 int len[100];                              //stores lenght of every word
-char checkPath(char *str){
+char checkPath(char *str){                 //Checks if the given string contains the word path on it
    while(*str != '\0'){
     if(*str =='P'){
 	*str ++;
@@ -24,7 +24,7 @@ char checkPath(char *str){
   return 0;
 }
 
-int checkEx(char *str){
+int checkEx(char *str){                     //checks if th given string contains the word exit
   while(*str != '\0'){
     if(*str =='e'){
 	*str ++;
