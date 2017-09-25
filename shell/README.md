@@ -8,10 +8,8 @@ This program contains the following files:
 
 ## How to Run
 -To create files, once in the directory type "make"
--To run the tokenizer type "make run"
+-To run the tokenizer type "sudo make run" and type user password
 -To clean *.o files, type "make clean"
 
 ## Extra Notes and Credits
--On the file shell.c, the function isExecutable was made based on what can be found on: https://stackoverflow.com/questions/13098620/using-stat-to-check-if-a-file-is-executable-in-c
-
 -The usage of wait() and WIFSIGNALED in the function isExecutable was based on how it was used on : https://hackintoshrao.com/tag/wifexited-and-wifsignaled-macros/
