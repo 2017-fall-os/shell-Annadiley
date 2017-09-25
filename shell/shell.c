@@ -16,10 +16,10 @@ int main (int atgc, char **arg, char **envp){
   while(equalsExit!=1){
     write(1,"$ ",2);                            //display the $ promt
     int bytesRead=read(1,stri,sizeof( stri));                 //get user input
-    stri[sizeof(char)*bytesRead]='\0';
+    stri[sizeof(char)*bytesRead-1]='\0';
     char **tokeenVect =mytoc(stri,' ');         //call my tokenizer function
-    equalsExit =checkEx(stri);                  //check if there must be an exit of the loop
-
+    equalsExit =checkEx(stri);
+    int ac =0;
     if(tokeenVect[0]){                          //if vector is not empty start command    
       for(int i=0;envp[i] != (char *)0;i++){        //as long as the envp contains no 0
 	 char ** envPath =mytoc (envp[i],'=');       //tokenize path
@@ -29,32 +29,33 @@ int main (int atgc, char **arg, char **envp){
 	 }
       }
       char **pathVect = mytoc(enpath,':');          //tokenize path from envp variable
-      if(access(tokeenVect[0],X_OK)!=-1){          //If it is a full path
+      if(access(tokeenVect[0],F_OK)!=-1){          //If it is a full path
 	printf("Excecuting command:\n", tokeenVect[0]);
 	createChildProcess(tokeenVect[0] ,tokeenVect, envp); //create process
 	}
-      else{                                                  //search for full path
+      else {                                                  //search for full path
 	for( int i=0;pathVect[i] !=(char*)0;i++){
 	  char *temp = strcat(pathVect[i],"/");
 	  char *fullPath =strcat(temp,tokeenVect[0]);
-	  if(access(fullPath,X_OK)!=-1){
+	  if(access(fullPath,F_OK)!=-1){
+	    ac=1;
 	    createChildProcess(fullPath ,tokeenVect, envp); //create process
-	    break;
-	    
+	    break;  
 	  }
 	}
+	if(!equalsExit&&ac==0){
 	printf("Command not found\n");
-      }
-   
+	}
+     }
     for(int i =0; i<sizeof(stri);i++){     //free previous space
       stri[i]='\0';
-    }                 
+    }
     }
   }return 0;
 }
  void createChildProcess(char * path , char **tokenVect, char **eenvp){
    int exitNorm;                          //used to check if child process terminated normaly
-   fflush(NULL);
+   // fflush(NULL);
    pid = fork();                          //create child process
    if(pid == 0){                          
      execve(path,tokenVect,eenvp);        //execute child process
