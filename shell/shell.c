@@ -6,7 +6,6 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 //function declarations
-int isExecutable(char *path);
 void createChildProcess(char * path , char **tokenVect, char **eenvp);
    
 int equalsExit,pid,execV;
@@ -15,7 +14,6 @@ char *toExecute;
 int main (int atgc, char **arg, char **envp){
   char *enpath;
   while(equalsExit!=1){
-    toExecute=NULL;
     write(1,"$ ",2);                            //display the $ promt
     int bytesRead=read(1,stri,sizeof( stri));                 //get user input
     stri[sizeof(char)*bytesRead]='\0';
@@ -23,15 +21,15 @@ int main (int atgc, char **arg, char **envp){
     equalsExit =checkEx(stri);                  //check if there must be an exit of the loop
 
     if(tokeenVect[0]){                          //if vector is not empty start command    
-       for(int i=0;envp[i] != (char *)0;i++){        //as long as the envp contains no 0
-           char ** envPath =mytoc (envp[i],'=');       //tokenize path
-           if(checkPath(envPath[0])){                  //check if word path was found
+      for(int i=0;envp[i] != (char *)0;i++){        //as long as the envp contains no 0
+	 char ** envPath =mytoc (envp[i],'=');       //tokenize path
+	 if(checkPath(envPath[0])){                  //check if word path was found
            enpath= envPath[1];                       //return env, which should be in next potition on array
            break;
-    }
-  }
-  char **pathVect = mytoc(enpath,':');          //tokenize path from envp variable
-      if(isExecutable(tokeenVect[0])){          //If it is a full path
+	 }
+      }
+      char **pathVect = mytoc(enpath,':');          //tokenize path from envp variable
+      if(access(tokeenVect[0],X_OK)!=-1){          //If it is a full path
 	printf("Excecuting command:\n", tokeenVect[0]);
 	createChildProcess(tokeenVect[0] ,tokeenVect, envp); //create process
 	}
@@ -39,9 +37,9 @@ int main (int atgc, char **arg, char **envp){
 	for( int i=0;pathVect[i] !=(char*)0;i++){
 	  char *temp = strcat(pathVect[i],"/");
 	  char *fullPath =strcat(temp,tokeenVect[0]);
-	  if(isExecutable(fullPath)){
-	      createChildProcess(fullPath ,tokeenVect, envp); //create process
-	      break;
+	  if(access(fullPath,X_OK)!=-1){
+	    createChildProcess(fullPath ,tokeenVect, envp); //create process
+	    break;
 	    
 	  }
 	}
@@ -51,16 +49,12 @@ int main (int atgc, char **arg, char **envp){
     for(int i =0; i<sizeof(stri);i++){     //free previous space
       stri[i]='\0';
     }                 
-    return 0;
     }
-  }
-}
-int isExecutable(char *path){            //Method used to check if hte given path to a file can be actually executed or not
-  struct stat s;
-  return (((stat(path,&s)==0)&&(s.st_mode & S_IXOTH))?(short)1:(short)0); //checks if there is a path and if we have execure permission for it.	
+  }return 0;
 }
  void createChildProcess(char * path , char **tokenVect, char **eenvp){
    int exitNorm;                          //used to check if child process terminated normaly
+   fflush(NULL);
    pid = fork();                          //create child process
    if(pid == 0){                          
      execve(path,tokenVect,eenvp);        //execute child process
