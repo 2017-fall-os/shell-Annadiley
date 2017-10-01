@@ -13,3 +13,5 @@ This program contains the following files:
 
 ## Extra Notes and Credits
 -The usage of wait() and WIFSIGNALED in the function isExecutable was based on how it was used on : https://hackintoshrao.com/tag/wifexited-and-wifsignaled-macros/
+-The usage of the stat(dirName,&sb)==0........
+ line was based on the information found on : https://stackoverflow.com/questions/12510874/how-can-i-check-if-a-directory-exists

@@ -5,7 +5,7 @@
 int equalsExit,numWords,currentWordLen;
 char *stricopy;                               
 int len[100];                              //stores lenght of every word
-char checkPath(char *str){                 //Checks if the given string contains the word path on it
+int checkPath(char *str){                 //Checks if the given string contains the word path on it
    while(*str != '\0'){
     if(*str =='P'){
 	*str ++;
@@ -42,7 +42,18 @@ int checkEx(char *str){                     //checks if th given string contains
   }
   return 0;
 }
-
+int checkCd(char *str){
+  while(*str != '\0'){
+    if(*str =='c'){
+	*str ++;
+	if(*str =='d'){
+	  return 1;
+	}
+    }
+    *str++;
+  }
+  return 0;
+}
 void countWords(char *str, char delim){    //get the number of words in the string
   numWords = currentWordLen =0;
   if(*str !='\0'){
@@ -78,7 +89,7 @@ char ** mytoc(char *str,char delim){
     for(int i=1; i<=len[tokNum]+1;i++){              //advance the current pointer to the next word
       str++;
     }
-    tokenVec[tokNum-1]=a;                            //add the complete word to the vector
+    tokenVec[tokNum-1]=a; //add the complete word to the vector
   }
   tokenVec[numWords+1]='\0';                         //add terminating symbol at the end of vector
   return tokenVec;                                   //return the vector

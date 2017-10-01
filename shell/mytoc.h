@@ -8,8 +8,9 @@ extern int numChar , numWords;
 void countWords (char *str, char delim);
 
 //Method used to check if there is the word path
-char checkPath(char *str);
-  
+int checkPath(char *str);
+
+int checkCd(char *str);
 //Method to check if the command entered is to exit
 int checkEx(char *str);
  
