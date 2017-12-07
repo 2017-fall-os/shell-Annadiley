@@ -15,3 +15,7 @@ This program contains the following files:
 -The usage of wait() and WIFSIGNALED in the function isExecutable was based on how it was used on : https://hackintoshrao.com/tag/wifexited-and-wifsignaled-macros/
 -The usage of the stat(dirName,&sb)==0........
  line was based on the information found on : https://stackoverflow.com/questions/12510874/how-can-i-check-if-a-directory-exists
+ ## Edit: 12/6/2017
+ - The shell does accept basic command inputs howeverm it does not pass any test from the thestShell
+ - The shell does change directory without problem
+ - There are a couple of bugs with piping and background process, but mostly it is now functional
